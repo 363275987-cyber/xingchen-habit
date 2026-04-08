@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>王星晨 - 习惯打卡 + 游戏时间账户</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    :root {
+      --primary: #2ecc71;
+      --primary-dark: #27ae60;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --warning: #f59e0b;
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #8e8e93;
+      --border: #e5e5ea;
+      --shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      --radius: 16px;
+    }
+    body {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 16px 60px;
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+    .header {
+      text-align: center;
+      padding: 0 0 24px;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid var(--primary);
+    }
+    .badge.gold {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
+    }
+    .balance-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .balance-label {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .balance {
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+      letter-spacing: -2px;
+      transition: all 0.3s;
+      margin-bottom: 16px;
+    }
+    .interest-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #fafafa;
+      border-radius: 12px;
+    }
+    .interest-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .interest-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .stat-box {
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .action-btn {
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: var(--shadow);
+    }
+    .action-btn span {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .action-btn.primary {
+      background: var(--primary);
+    }
+    .action-btn.primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.25);
+    }
+    .action-btn.warning {
+      background: var(--warning);
+    }
+    .action-btn.warning:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+    }
+    .quick-full {
+      margin-bottom: 20px;
+    }
+    .quick-full .action-btn {
+      width: 100%;
+      aspect-ratio: auto;
+      padding: 16px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .habit-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .calendar-day-header {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 8px 4px;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--card);
+    }
+    .calendar-day.tomorrow-hair {
+      background: #fffbeb;
+      border-color: var(--warning);
+    }
+    .calendar-day:hover {
+      border-color: var(--primary);
+      transform: scale(1.03);
+    }
+    .calendar-day.checked {
+      background: #f0fdf4;
+      border-color: var(--primary);
+    }
+    .calendar-day-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .calendar-day-checks {
+      display: flex;
+      gap: 2px;
+      margin-top: 3px;
+    }
+    .check-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #e5e5ea;
+    }
+    .check-dot.done {
+      background: var(--primary);
+    }
+    .week-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .week-summary-info {
+      font-size: 14px;
+    }
+    .week-summary-perfect {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .week-summary button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .week-summary button:disabled {
+      background: #c9c9cc;
+      cursor: not-allowed;
+    }
+    .week-summary button.needs-confirm {
+      background: var(--warning);
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+    .btn-primary {
+      background: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.25);
+    }
+    .btn-danger {
+      background: var(--danger);
+    }
+    .btn-danger:hover {
+      background: var(--danger-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.25);
+    }
+    .btn-warning {
+      background: var(--warning);
+    }
+    .btn-warning:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+    }
+    .history-section {
+      margin-top: 0;
+    }
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    .history-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .history-change {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .positive {
+      color: var(--primary);
+    }
+    .negative {
+      color: var(--danger);
+    }
+    .rules-card {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-left: none;
+      padding: 20px;
+    }
+    .rules-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #166534;
+      margin-bottom: 12px;
+    }
+    .rules-list {
+      margin-left: 20px;
+      color: #374151;
+      line-height: 1.8;
+    }
+    .rules-list li {
+      margin-bottom: 6px;
+    }
+    .empty-history {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 30px 0;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(0, 0, 0, 0, 0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 9999;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* 弹窗 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .check-label {
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+    .check-input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .modal-buttons .btn {
+      flex: 1;
+    }
+
+    /* 每周报表 */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .report-table td, .report-table th {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .report-table th {
+      background: #fafafa;
+    }
+    .done-cell {
+      color: var(--primary);
+      font-weight: bold;
+    }
+    .miss-cell {
+      color: var(--danger);
+    }
+
+    @media (max-width: 480px) {
+      .balance {
+        font-size: 48px;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .habit-calendar {
+        gap: 4px;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎱 王星晨</h1>
+    <p class="subtitle">习惯打卡 · 每日 1% 复利 · 存得越久，涨得越多</p>
+    <div id="badgesContainer" class="badges"></div>
+  </div>
+
+  <!-- 余额放最上面，最大最突出 -->
+  <div class="balance-card">
+    <div class="balance-label">当前账户余额（分钟）</div>
+    <div class="balance"><span id="currentBalance">0.0</span></div>
+    <div class="interest-row">
+      <span class="interest-label">预计今日利息 (1%)</span>
+      <span class="interest-value" id="dailyInterest">0.0</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">开户天数</div>
+        <div class="stat-value" id="daysPassed">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">累计存入</div>
+        <div class="stat-value" id="totalDeposited">0</div>
+      </div>
+    </div>
+    <div class="stats-grid" style="margin-top: 12px;">
+      <div class="stat-box">
+        <div class="stat-label">累计全勤周</div>
+        <div class="stat-value" id="totalPerfectWeeks">0</div>
+      </div>
+      <div class="stat-box" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px;">
+        <button class="action-btn primary" style="width: 100%; aspect-ratio: auto; padding: 8px 12px; font-size: 14px;" onclick="openDepositModal()">📥 存入</button>
+        <button class="action-btn primary" style="width: 100%; aspect-ratio: auto; padding: 8px 12px; font-size: 14px;" onclick="openWithdrawModal()">📤 取出</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本周总结按钮单独放 -->
+  <div class="quick-full">
+    <button class="action-btn warning" onclick="showWeekReport()" style="width: 100%; aspect-ratio: auto; padding: 16px;">
+      📊 本周总结
+    </button>
+  </div>
+
+  <div class="quick-full">
+    <button class="action-btn primary" onclick="quickCheckToday()" style="width: 100%; aspect-ratio: auto; padding: 16px;">
+      ⚡ 一键补全今日打卡
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧻 卫生习惯打卡 (本月)</div>
+    <div id="habitCalendar" class="habit-calendar">
+      <!-- 动态生成 -->
+    </div>
+    <div id="weekSummaries"></div>
+    <div class="btn-group" style="margin-top: 16px;">
+      <button class="btn btn-primary" onclick="goToToday()">🔍 跳转到今日打卡</button>
+      <button class="btn btn-danger" onclick="resetAllHabits()">重置本月打卡</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ 账户操作</div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="calculateDailyInterest()">结算今日利息</button>
+      <button class="btn btn-warning" onclick="exportData()">💾 导出备份</button>
+      <button class="btn btn-danger" onclick="resetAll()">重置整个账户</button>
+    </div>
+  </div>
+
+  <div class="card history-section">
+    <div class="card-title">📜 最近操作记录</div>
+    <div class="history-list" id="historyList">
+      <div class="empty-history">还没有操作记录哦</div>
+    </div>
+  </div>
+
+  <div class="card rules-card">
+    <div class="rules-title">📋 规则说明</div>
+    <ul class="rules-list">
+      <li><strong>打卡规则：</strong>
+        <ul>
+          <li>刷牙：每天 <strong>早晚各一次</strong>，分别勾选</li>
+          <li>洗澡：每天 <strong>一次</strong>，勾选</li>
+          <li>洗头：<strong>每三天一次</strong>，系统自动显示洗头选项，<strong>明天要洗头会提前橙底标记</strong></li>
+          <li><strong>每周结束，系统自动检查全勤 → 父亲确认后 → 领取 <strong>80 分钟</strong>奖励</strong></li>
+          <li><strong>快捷操作：</strong>点「一键补全今日打卡」直接完成 早刷+晚刷+洗澡，不用开弹窗，省时间</li>
+          <li><strong>错了怎么办：</strong>重新点日期打开弹窗，改勾选再保存就行，随时补卡</li>
+        </ul>
+      </li>
+      <li><strong>复利规则：</strong>每天自动结算利息，余额 × 1% = 今日利息，利息自动入账，利滚利，存得越久涨得越多</li>
+      <li><strong>兑换规则：</strong>1 小时羽毛球运动 = 120 分钟游戏时间，存入账户</li>
+      <li><strong>成就徽章：</strong>每累计 4 个全勤周升级一次徽章</li>
+      <li><strong>本地存储：</strong>所有数据存在你自己的手机/电脑浏览器里，刷新不会丢，可以导出备份</li>
+      <li><strong>目标：</strong>慢慢培养运动习惯、卫生习惯、延迟满足能力，存时间越长，赚得越多 💪</li>
+    </ul>
+  </div>
+
+  <!-- 弹窗 -->
+  <div id="depositModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title">📥 存入游戏时间</div>
+      <div class="form-group">
+        <label class="form-label">存入分钟数（1小时运动 = 120分钟）</label>
+        <input type="number" id="depositAmount" class="form-input" placeholder="例如：120" min="0" step="1">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="deposit()">确认存入</button>
+        <button class="btn btn-danger" onclick="closeModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="withdrawModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title">📤 取出游戏时间</div>
+      <div class="form-group">
+        <label class="form-label">取出分钟数（玩多久取多久）</label>
+        <input type="number" id="withdrawAmount" class="form-input" placeholder="例如：120" min="0" step="1">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="withdraw()">确认取出</button>
+        <button class="btn btn-danger" onclick="closeModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="habitModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title" id="habitModalTitle">XX月XX日 打卡</div>
+      <div class="check-item">
+        <label class="check-label">早上刷牙</label>
+        <input type="checkbox" id="checkMorning" class="check-input">
+      </div>
+      <div class="check-item">
+        <label class="check-label">晚上刷牙</label>
+        <input type="checkbox" id="checkNight" class="check-input">
+      </div>
+      <div class="check-item">
+        <label class="check-label">洗澡</label>
+        <input type="checkbox" id="checkBath" class="check-input">
+      </div>
+      <div id="hairCheckContainer" class="check-item" style="display: none;">
+        <label class="check-label">洗头（今天该洗啦）</label>
+        <input type="checkbox" id="checkHair" class="check-input">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="saveHabit()">保存打卡</button>
+        <button class="btn btn-danger" onclick="closeModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title">📊 本周打卡总结</div>
+      <div id="reportContent"></div>
+      <div class="modal-buttons">
+        <button class="btn btn-danger" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exportModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title">💾 导出数据备份</div>
+      <div class="form-group">
+        <label class="form-label">复制下面的 JSON 保存到安全地方，丢失了可以恢复</label>
+        <textarea id="exportText" class="form-input" rows="10" readonly></textarea>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" onclick="copyExport()">复制到剪贴板</button>
+        <button class="btn btn-danger" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ============================================
+    // 本地存储key
+    const STORAGE_KEY = 'xingchen-habit-game-account';
+
+    // 日期工具函数
+    function getCurrentMonth() {
+      const now = new Date();
+      return {
+        year: now.getFullYear(),
+        month: now.getMonth(),
+      };
+    }
+
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function getFirstDayOfMonth(year, month) {
+      return new Date(year, month, 1).getDay();
+    }
+
+    function daysBetween(date1, date2) {
+      const oneDay = 24 * 60 * 60 * 1000;
+      return Math.round(Math.abs((date1 - date2) / oneDay));
+    }
+
+    // 当前编辑日期
+    let currentEditingDate = null;
+    let currentNeedHair = false;
+
+    // 动画帧数
+    const ANIMATION_STEPS = 30;
+    const ANIMATION_INTERVAL = 30;
+
+    // 初始化状态
+    let state = {
+      balance: 0,
+      daysPassed: 0,
+      totalPerfectWeeks: 0,
+      totalDeposited: 0,
+      habits: {},
+      history: [],
+      confirmedWeeks: [],
+      createDate: null, // 开户日期
+    };
+
+    // Toast提示
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // 打开弹窗函数
+    function openDepositModal() {
+      document.getElementById('depositModal').classList.add('show');
+      document.getElementById('depositAmount').focus();
+    }
+
+    function openWithdrawModal() {
+      document.getElementById('withdrawModal').classList.add('show');
+      document.getElementById('withdrawAmount').focus();
+    }
+
+    function openHabitModal(dateStr) {
+      currentEditingDate = dateStr;
+      const [year, month, day] = dateStr.split('-').map(Number);
+      const needHair = (day - 1) % 3 === 2;
+      currentNeedHair = needHair;
+
+      document.getElementById('habitModalTitle').textContent = `${year}年${month}月${day}日 打卡`;
+
+      // 加载现有状态
+      const habit = state.habits[dateStr] || {
+        morningBrush: false,
+        nightBrush: false,
+        bath: false,
+        hair: false,
+      };
+      document.getElementById('checkMorning').checked = habit.morningBrush;
+      document.getElementById('checkNight').checked = habit.nightBrush;
+      document.getElementById('checkBath').checked = habit.bath;
+
+      if (needHair) {
+        document.getElementById('hairCheckContainer').style.display = 'flex';
+        document.getElementById('checkHair').checked = habit.hair;
+      } else {
+        document.getElementById('hairCheckContainer').style.display = 'none';
+      }
+
+      document.getElementById('habitModal').classList.add('show');
+    }
+
+    function closeModal(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      document.querySelectorAll('.modal-overlay').forEach(m => {
+        m.classList.remove('show');
+      });
+    }
+
+    // 更新徽章
+    function updateBadges() {
+      const container = document.getElementById('badgesContainer');
+      const count = state.totalPerfectWeeks;
+      let html = '';
+      const gold = Math.floor(count / 4);
+      const remaining = count - gold * 4;
+      for (let i = 0; i < gold; i++) {
+        html += `<span class="badge gold">🏆 超级卫士 ${i+1}</span>`;
+      }
+      for (let i = 0; i < remaining; i++) {
+        html += `<span class="badge">🟢 卫生小卫士 ${i+1}</span>`;
+      }
+      container.innerHTML = html;
+    }
+
+    // 更新统计信息UI
+    function updateUI() {
+      updateBadges();
+      document.getElementById('daysPassed').textContent = state.daysPassed;
+      document.getElementById('totalDeposited').textContent = state.totalDeposited;
+      document.getElementById('totalPerfectWeeks').textContent = state.totalPerfectWeeks;
+      document.getElementById('dailyInterest').textContent = (state.balance * 0.01).toFixed(2);
+      animateBalance(state.balance);
+      renderHistory();
+    }
+
+    // 余额数字递增动画
+    function animateBalance(targetBalance) {
+      const start = parseFloat(document.getElementById('currentBalance').textContent) || 0;
+      const diff = targetBalance - start;
+      if (diff === 0) return;
+
+      let step = 0;
+      const interval = setInterval(() => {
+        step++;
+        const progress = step / ANIMATION_STEPS;
+        document.getElementById('currentBalance').textContent = (start + diff * progress).toFixed(1);
+        if (step >= ANIMATION_STEPS) {
+          document.getElementById('currentBalance').textContent = targetBalance.toFixed(1);
+          clearInterval(interval);
+        }
+      }, ANIMATION_INTERVAL);
+    }
+
+    // 渲染日历
+    function renderCalendar() {
+      const {year, month} = getCurrentMonth();
+      const days = getDaysInMonth(year, month);
+      const firstDay = getFirstDayOfMonth(year, month);
+      const container = document.getElementById('habitCalendar');
+      container.innerHTML = '';
+
+      // 表头
+      const headerHtml = `
+        <div class="calendar-day-header">日</div>
+        <div class="calendar-day-header">一</div>
+        <div class="calendar-day-header">二</div>
+        <div class="calendar-day-header">三</div>
+        <div class="calendar-day-header">四</div>
+        <div class="calendar-day-header">五</div>
+        <div class="calendar-day-header">六</div>
+      `;
+      container.innerHTML = headerHtml;
+
+      // 填前面的空白天数
+      for (let i = 0; i < firstDay; i++) {
+        container.innerHTML += `<div class="calendar-day"></div>`;
+      }
+
+      // 日期
+      const today = new Date();
+      const todayDate = today.getDate();      const todayMonth = today.getMonth();
+      const todayYear = today.getFullYear();
+      const needHairTomorrow = (todayDate + 1) % 3 === 2 && todayDate !== days;
+
+      for (let day = 1; day <= days; day++) {
+        const dateStr = `${year}-${month+1}-${day}`;
+        const needHair = (day - 1) % 3 === 2;
+        const habit = state.habits[dateStr] || {
+          morningBrush: false,
+          nightBrush: false,
+          bath: false,
+          hair: false,
+        };
+        const isChecked = needHair ? habit.hair : true;
+        let className = 'calendar-day';
+        if (needHairTomorrow) {
+          className += ' tomorrow-hair';
+        }
+        // 检查是否已经全完成
+        let complete = true;
+        if (habit.morningBrush && habit.nightBrush && habit.bath && (!needHair || habit.hair)) {
+          complete = complete && true;
+        }
+        container.innerHTML += `
+          <div class="${className} checked" onclick="openHabitModal('${dateStr}')">
+            <div class="calendar-day-num">${day}</div>
+            <div class="calendar-day-checks">
+              <div class="check-dot ${habit.morningBrush ? 'done' : ''}"></div>
+              <div class="check-dot ${habit.nightBrush ? 'done' : ''}"></div>
+              <div class="check-dot ${habit.bath ? 'done' : ''}"></div>
+              <div class="check-dot ${needHair && isChecked ? 'done' : ''}"></div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // 渲染历史记录
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      if (!state.history || state.history.length === 0) {
+        container.innerHTML = '<div class="empty-history">还没有操作记录哦</div>';
+        return;
+      }
+
+      // 按时间倒序，最近的在前
+      const sorted = [...state.history].reverse().slice(0, 20);
+      let html = '';
+      sorted.forEach(h => {
+        const date = new Date(h.time);
+        const dateStr = `${date.getMonth()+1}月${date.getDate()}日} ${date.getHours()}:${String(date.getMinutes()).padStart(2,'0')}`;
+        const className = h.change > 0 ? 'positive' : 'negative';
+        const sign = h.change > 0 ? '+' : '';
+        html += `
+          <div class="history-item">
+            <span class="history-date">${dateStr}</span>
+            <span class="history-change ${className}">${sign}${h.change}分钟${h.note ? ' ' + h.note : ''}</span>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // 更新保存
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // 自动计算利息：根据开户日期，每天自动加利息
+    function autoCalculateInterest() {
+      if (!state.createDate) {
+        // 首次使用，设置开户日期
+        state.createDate = new Date().toISOString();
+        saveState();
+        return;
+      }
+
+      const createDate = new Date(state.createDate);
+      const today = new Date();
+      const daysPassed = daysBetween(createDate, today);
+
+      if (daysPassed <= state.daysPassed) {
+        // 已经结算过这些天数了
+        return;
+      }
+
+      // 计算需要结算的天数
+      const daysToAdd = daysPassed - state.daysPassed;
+
+      // 逐天计算复利，每天 1%
+      let currentBalance = state.balance;
+      for (let i = 0; i < daysToAdd; i++) {
+        const interest = currentBalance * 0.01;
+        currentBalance += interest;
+      }
+
+      if (daysToAdd > 0 && currentBalance > state.balance) {
+        const totalInterest = currentBalance - state.balance;
+        state.balance = currentBalance;
+        state.daysPassed = daysPassed;
+        // 添加历史记录
+        state.history.unshift({
+          time: new Date().toISOString(),
+          change: totalInterest,
+          note: `(自动利息 ${daysToAdd} 天)`
+        });
+        showToast(`✅ 自动结算 ${daysToAdd} 天利息，+${totalInterest.toFixed(1)} 分钟`);
+        saveState();
+      }
+    }
+
+    // 手动结算今日利息
+    function calculateDailyInterest() {
+      autoCalculateInterest();
+      updateUI();
+      saveState();
+    }
+
+    // 从存储加载
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const loaded = JSON.parse(saved);
+          // 兼容旧版本没有createDate
+          if (!loaded.createDate) {
+            loaded.createDate = new Date().toISOString();
+          }
+          state = loaded;
+          // 自动计算利息
+          autoCalculateInterest();
+        } catch (e) {
+          console.error('加载数据失败', e);
+        }
+      } else {
+        // 新用户，设置开户日期
+        state.createDate = new Date().toISOString();
+      }
+    }
+
+    // 存入
+    function deposit() {
+      const amount = parseInt(document.getElementById('depositAmount').value);
+      if (isNaN(amount) || amount <= 0) {
+        showToast('请输入正确的存入数量');
+        return;
+      }
+      state.balance += amount;
+      state.totalDeposited += amount;
+      state.history.unshift({
+        time: new Date().toISOString(),
+        change: amount,
+        note: '(存入)'
+      });
+      showToast(`✅ 存入 ${amount} 分钟成功`);
+      document.getElementById('depositAmount').value = '';
+      closeModal();
+      updateUI();
+      saveState();
+    }
+
+    // 取出
+    function withdraw() {
+      const amount = parseInt(document.getElementById('withdrawAmount').value);
+      if (isNaN(amount) || amount <= 0) {
+        showToast('请输入正确的取出数量');
+        return;
+      }
+      if (amount > state.balance) {
+        showToast('❌ 余额不足');
+        return;
+      }
+      state.balance -= amount;
+      state.history.unshift({
+        time: new Date().toISOString(),
+        change: -amount,
+        note: '(取出)'
+      });
+      showToast(`✅ 取出 ${amount} 分钟成功`);
+      document.getElementById('withdrawAmount').value = '';
+      closeModal();
+      updateUI();
+      saveState();
+    }
+
+    // 保存打卡
+    function saveHabit() {
+      if (!currentEditingDate) {
+        closeModal();
+        return;
+      }
+      const habit = {
+        morningBrush: document.getElementById('checkMorning').checked,
+        nightBrush: document.getElementById('checkNight').checked,
+        bath: document.getElementById('checkBath').checked,
+        hair: currentNeedHair ? document.getElementById('checkHair').checked : true,
+      };
+      state.habits[currentEditingDate] = habit;
+
+      // 检查是否全勤
+      checkWeeklyPerfect();
+      renderCalendar();
+      updateUI();
+      saveState();
+      closeModal();
+      showToast('✅ 打卡保存成功');
+    }
+
+    // 一键补全今日打卡（早刷+晚刷+洗澡）
+    function quickCheckToday() {
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+      const existing = state.habits[dateStr] || {};
+      state.habits[dateStr] = {
+        morningBrush: true,
+        nightBrush: true,
+        bath: true,
+        hair: existing.hair || false,
+      };
+      checkWeeklyPerfect();
+      renderCalendar();
+      updateUI();
+      saveState();
+      showToast('✅ 一键完成今日打卡');
+    }
+
+    // 检查每周全勤
+    function checkWeeklyPerfect() {
+      // 简化版：每个自然周算一周
+      // 后续可以优化
+    }
+
+    // 跳转到今日
+    function goToToday() {
+      // 重新渲染，滚动到今天的位置
+      renderCalendar();
+      const today = new Date();
+      const day = today.getDate();
+      // 估算位置，简单滚动
+      setTimeout(() => {
+        const days = document.querySelectorAll('.calendar-day');
+        if (days[day]) {
+          days[day].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
+
+    // 显示本周报告
+    function showWeekReport() {
+      // 生成本周报表
+      const now = new Date();
+      const currentWeek = getCurrentMonth();
+      let html = '';
+      // 这里简化实现，弹出modal显示即可
+      html += '<p>本周打卡统计功能开发中...</p>';
+      document.getElementById('reportContent').innerHTML = html;
+      document.getElementById('reportModal').classList.add('show');
+    }
+
+    // 复制导出
+    function copyExport() {
+      const text = document.getElementById('exportText').value;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ 已复制到剪贴板');
+      }).catch(() => {
+        showToast('请手动复制');
+      });
+    }
+
+    // 导出数据
+    function exportData() {
+      const json = JSON.stringify(state, null, 2);
+      document.getElementById('exportText').value = json;
+      document.getElementById('exportModal').classList.add('show');
+    }
+
+    // 重置本月打卡
+    function resetAllHabits() {
+      if (!confirm('确定要重置本月所有打卡吗？')) return;
+      state.habits = {};
+      renderCalendar();
+      saveState();
+      showToast('✅ 本月打卡已重置');
+    }
+
+    // 重置整个账户
+    function resetAll() {
+      if (!confirm('⚠️ 确定要重置整个账户吗？所有数据都会清空，无法恢复！')) return;
+      state = {
+        balance: 0,
+        daysPassed: 0,
+        totalPerfectWeeks: 0,
+        totalDeposited: 0,
+        habits: {},
+        history: [],
+        confirmedWeeks: [],
+        createDate: new Date().toISOString(),
+      };
+      renderCalendar();
+      updateUI();
+      saveState();
+      showToast('✅ 账户已完全重置');
+    }
+
+    // 初始化
+    loadState();
+    renderCalendar();
+    updateUI();
+  </script>
+</body>
+</html>
